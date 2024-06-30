@@ -3,6 +3,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import authRouter from "./routes/auth.js";
+import categoryRouter from "./routes/menu.js";
 
 const config = dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/auth", authRouter);
+app.use("/menu", categoryRouter);
 
 app.get("/", (req, res) => {
   res.sendStatus(200);
