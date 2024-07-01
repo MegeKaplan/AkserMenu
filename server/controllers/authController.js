@@ -31,39 +31,37 @@ export const register = async (req, res) => {
 
     if (!(await isValidEmail(email))) {
       return res.status(500).json({
-        msg: "Email is not valid!",
+        msg: "E-Posta kullanılıyor veya uygun formatta değil!",
       });
     }
 
-    if (password.length <= 3) {
+    if (password.length <= 4) {
       return res.status(500).json({
-        msg: "Password is must be have more than 3 characters!",
+        msg: "Şifrenin uzunluğu 4 karakterden fazla olmalıdır!",
       });
     }
-
-    const userData = { email, username, password, menuId };
 
     const promise = await databases
       .createDocument(
         process.env.APPWRITE_DATABASE_ID,
         process.env.APPWRITE_USERS_COLLECTION_ID,
         ID.unique(),
-        userData
+        { email, username, password, menuId }
       )
       .then(
-        function (response) {
-          console.log("success");
+        (response) => {
+          console.log("register operation success");
           return response;
         },
-        function (error) {
-          console.log("error");
-          return error;
+        (error) => {
+          console.log("register operation failure");
+          return error.message;
         }
       );
 
     res.status(201).json({
-      status: "OK",
-      promise,
+      msg: "Kullanıcı kaydı başarıyla tamamlandı!",
+      userData: { ...promise },
     });
   } catch (error) {
     res.status(500).json({
@@ -89,11 +87,9 @@ export const login = async (req, res) => {
       menuId: process.env.MENU_ID,
     };
 
-    console.log(await isUserAvailable(email));
-
     if (!(await isUserAvailable(email))) {
       return res.status(500).json({
-        msg: "User not found!",
+        msg: "Kullanıcı bulunamadı!",
       });
     }
 
@@ -105,13 +101,13 @@ export const login = async (req, res) => {
 
     if (response.total === 0) {
       return res.status(500).json({
-        msg: "Password is wrong!",
+        msg: "Şifre yanlış!",
       });
     }
 
     res.status(201).json({
-      status: "OK",
-      response,
+      msg: "Giriş işlemi başarıyla tamamlandı!",
+      userData: { ...response },
     });
   } catch (error) {
     res.status(500).json({
