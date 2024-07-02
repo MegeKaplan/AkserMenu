@@ -10,11 +10,11 @@ const client = new Client()
 
 const databases = new Databases(client);
 
-const getCategoriesFunc = async () => {
+const getItemsFunc = async () => {
   const response = await databases.listDocuments(
     process.env.APPWRITE_DATABASE_ID,
-    process.env.MENU_ID,
-    [Query.equal("type", "category")]
+    process.env.MENU_ID
+    // [Query.equal("type", "category")]
   );
 
   return response;
@@ -22,11 +22,23 @@ const getCategoriesFunc = async () => {
 
 export const getItems = async (req, res) => {
   try {
-    const response = await getCategoriesFunc();
+    const response = await getItemsFunc();
+
+    const items = response.documents
+
+    const categories = items.filter(item => item.type.toString() === "category")
+    const products = items.filter(item => item.type.toString() === "product")
+
+    const menu = categories.map(category => {
+      return {
+        ...category,
+        products: products.filter(product => product.category === category.$id)
+      };
+    });
 
     res.status(201).json({
       status: "OK",
-      response: response.documents,
+      data: menu,
     });
   } catch (error) {
     res.status(500).json({
@@ -36,21 +48,22 @@ export const getItems = async (req, res) => {
 };
 
 export const getItem = async (req, res) => {
-  try {
-    const response = await databases.listDocuments(
-      process.env.APPWRITE_DATABASE_ID,
-      process.env.MENU_ID
-    );
+  // try {
+  //   const response = await databases.listDocuments(
+  //     process.env.APPWRITE_DATABASE_ID,
+  //     process.env.MENU_ID
+  //   );
 
-    res.status(201).json({
-      status: "OK",
-      response,
-    });
-  } catch (error) {
-    res.status(500).json({
-      msg: error.message,
-    });
-  }
+  //   res.status(201).json({
+  //     status: "OK",
+  //     response,
+  //   });
+  // } catch (error) {
+  //   res.status(500).json({
+  //     msg: error.message,
+  //   });
+  // }
+  res.status(200);
 };
 
 export const addItem = async (req, res) => {
@@ -96,7 +109,7 @@ export const addItem = async (req, res) => {
 
     res.status(201).json({
       status: "OK",
-      promise,
+      data: { ...promise },
     });
   } catch (error) {
     res.status(500).json({
@@ -149,7 +162,7 @@ export const updateItem = async (req, res) => {
 
     res.status(201).json({
       status: "OK",
-      promise,
+      data: { ...promise },
     });
   } catch (error) {
     res.status(500).json({
@@ -181,7 +194,7 @@ export const deleteItem = async (req, res) => {
 
     res.status(201).json({
       status: "OK",
-      promise,
+      data: { ...promise },
     });
   } catch (error) {
     res.status(500).json({

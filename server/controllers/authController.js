@@ -107,7 +107,7 @@ export const login = async (req, res) => {
 
     res.status(201).json({
       msg: "Giriş işlemi başarıyla tamamlandı!",
-      userData: { ...response },
+      userData: response.documents[0],
     });
   } catch (error) {
     res.status(500).json({
