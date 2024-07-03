@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
-    <div>
+    <div className="bg-gray-50 text-gray-800">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />

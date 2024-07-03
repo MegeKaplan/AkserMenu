@@ -17,26 +17,33 @@ const Menu = () => {
     getMenu();
   }, []);
 
-  console.log(JSON.parse(localStorage.getItem("userData")));
+  // console.log(JSON.parse(localStorage.getItem("userData")));
 
   return (
     <div>
       {menu.map((category, index) => (
         <div
+          id={category.$id}
           key={category.$id}
-          className={`${
-            index % 2 === 0 ? "bg-red-50" : "bg-red-100"
-          } flex flex-col items-center`}
+          className="flex flex-col items-center mb-4"
         >
-          <h1 className="w-full h-20 flex items-center justify-center font-bold text-3xl">
+          <h1 className="w-full h-14 mt-4 flex items-center justify-center font-bold text-3xl">
             {category.name}
           </h1>
-          <img src={category.imageUrl} alt="" />
-          <ul className="w-full">
+          <img
+            src={category.imageUrl}
+            alt=""
+            className="[clip-path:polygon(20%_0%,80%_0%,100%_20%,100%_100%,0%_100%,0%_20%)] w-12/12"
+          />
+          <ul
+            className={`${
+              index % 2 === 0 ? "bg-slate-100" : ""
+            } w-full flex flex-col items-center`}
+          >
             {category.products.map((product) => (
               <li
                 key={product.$id}
-                className="w-full h-16 flex flex-row items-center justify-between px-4 font-semibold border-b border-red-200"
+                className="w-11/12 h-16 flex flex-row items-center justify-between px-4 font-semibold border-b border-gray-200"
               >
                 <span>{product.name}</span>
                 <span>{product.price}₺</span>
