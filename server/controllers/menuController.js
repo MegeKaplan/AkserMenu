@@ -1,4 +1,11 @@
-import { Client, Databases, ID, Query } from "node-appwrite";
+import {
+  Client,
+  Databases,
+  ID,
+  Query,
+  Storage,
+  InputFile,
+} from "node-appwrite";
 import initConfig from "../initConfig.js";
 
 initConfig();
@@ -9,6 +16,8 @@ const client = new Client()
 // .setKey(config.APPWRITE_API_KEY)
 
 const databases = new Databases(client);
+
+const storage = new Storage(client);
 
 const getItemsFunc = async () => {
   const response = await databases.listDocuments(
@@ -24,15 +33,19 @@ export const getItems = async (req, res) => {
   try {
     const response = await getItemsFunc();
 
-    const items = response.documents
+    const items = response.documents;
 
-    const categories = items.filter(item => item.type.toString() === "category")
-    const products = items.filter(item => item.type.toString() === "product")
+    const categories = items.filter(
+      (item) => item.type.toString() === "category"
+    );
+    const products = items.filter((item) => item.type.toString() === "product");
 
-    const menu = categories.map(category => {
+    const menu = categories.map((category) => {
       return {
         ...category,
-        products: products.filter(product => product.category === category.$id)
+        products: products.filter(
+          (product) => product.category === category.$id
+        ),
       };
     });
 
@@ -68,25 +81,66 @@ export const getItem = async (req, res) => {
 
 export const addItem = async (req, res) => {
   try {
-    const { type, name, price, category } = req.body;
+    const item = req.body;
+    const file = req.file;
+    const priceInt = Number(item.price);
 
-    if (name.length == "") {
+    console.log(item);
+
+    if (item.name.length == "") {
       return res.status(500).json({
-        msg: "Name is cannot be empty!",
+        msg: "İsim boş bırakılamaz!",
       });
     }
 
-    if (type == "product" && Number(price) <= 0) {
+    if (item.type == "product" && !(item.price > 0)) {
       return res.status(500).json({
-        msg: "Price should be more!",
+        msg: "Fiyat sıfırdan daha fazla bir sayı olmalıdır!",
       });
+    }
+
+    if (item.type == "category") {
+      try {
+        const imageId = ID.unique();
+        (item.imageUrl =
+          process.env.APPWRITE_ENDPOINT +
+          "/storage/buckets/" +
+          process.env.APPWRITE_IMAGES_BUCKET +
+          "/files/" +
+          imageId +
+          "/view?project=" +
+          process.env.APPWRITE_PROJECT_ID),
+          await storage
+            .createFile(
+              process.env.APPWRITE_IMAGES_BUCKET,
+              imageId,
+              InputFile.fromBuffer(file.buffer, item.name + ".png")
+            )
+            .then(
+              async (response) => {
+                console.log("file suc");
+                console.log(response);
+              },
+              function (error) {
+                console.log("file err");
+                console.log(error);
+              }
+            );
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     var docData;
-    if (type === "category") {
-      docData = { type, name, imageUrl: "" };
+    if (item.type === "category") {
+      docData = { type: item.type, name: item.name, imageUrl: item.imageUrl };
     } else {
-      docData = { type, name, price, category };
+      docData = {
+        type: item.type,
+        name: item.name,
+        price: priceInt,
+        category: item.category,
+      };
     }
 
     const promise = await databases
@@ -99,7 +153,7 @@ export const addItem = async (req, res) => {
       .then(
         (response) => {
           console.log("success");
-          return response;
+          return response.data;
         },
         (error) => {
           console.log("error");
@@ -107,9 +161,15 @@ export const addItem = async (req, res) => {
         }
       );
 
+    var resMsg;
+    item.type == "product"
+      ? (resMsg = "Ürün başarıyla eklendi!")
+      : (resMsg = "Kategori başarıyla eklendi!");
     res.status(201).json({
       status: "OK",
-      data: { ...promise },
+      // data: promise,
+      data: promise,
+      msg: resMsg,
     });
   } catch (error) {
     res.status(500).json({
@@ -125,13 +185,13 @@ export const updateItem = async (req, res) => {
 
     if (name.length == "") {
       return res.status(500).json({
-        msg: "Name is cannot be empty!",
+        msg: "Ürün ismi boş bırakılamaz!",
       });
     }
 
     if (type == "product" && Number(price) <= 0) {
       return res.status(500).json({
-        msg: "Price should be more!",
+        msg: "Fiyat sıfırdan daha fazla olmalı!",
       });
     }
 
@@ -192,9 +252,12 @@ export const deleteItem = async (req, res) => {
         }
       );
 
+    var resMsg;
+    resMsg = "Silme işlemi başarılı!";
     res.status(201).json({
       status: "OK",
-      data: { ...promise },
+      data: promise,
+      msg: resMsg,
     });
   } catch (error) {
     res.status(500).json({

@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <div>
       <Nav />
-      <Menu />
+      <Menu isAdmin={false}/>
       <Footer/>
     </div>
   );

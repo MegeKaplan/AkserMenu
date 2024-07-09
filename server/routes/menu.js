@@ -9,9 +9,13 @@ import {
 
 const router = express.Router();
 
+import multer from "multer";
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 router.get("/", getItems);
 router.get("/:id", getItem);
-router.post("/", addItem);
+router.post("/", upload.single("file"), addItem);
 router.put("/:id", updateItem);
 router.delete("/:id", deleteItem);
 

@@ -24,7 +24,7 @@ export const registerAction = (authData) => async (dispatch) => {
     toast.success(data.msg, toastifyConfig);
 
     setTimeout(() => {
-      window.location = "/";
+      window.location = "/admin";
     }, toastifyConfig.autoClose);
   } catch (error) {
     toast.warning(error.response.data.msg, toastifyConfig);
@@ -43,7 +43,7 @@ export const loginAction = (authData) => async (dispatch) => {
     toast.success(data.msg, toastifyConfig);
 
     setTimeout(() => {
-      window.location = "/";
+      window.location = "/admin";
     }, toastifyConfig.autoClose);
   } catch (error) {
     toast.warning(error.response.data.msg, toastifyConfig);
