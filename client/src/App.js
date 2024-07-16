@@ -12,7 +12,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route
+            path="/admin"
+            element={localStorage.userData ? <Admin /> : <Auth />}
+          />
         </Routes>
       </BrowserRouter>
       <ToastContainer />
