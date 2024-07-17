@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import UpdateModal from "./UpdateModal";
 
 const toastifyConfig = {
   position: "top-right",
@@ -21,6 +22,11 @@ const Menu = (props) => {
     price: 0,
     category: "",
     file: "",
+  });
+  const [updateModalData, setUpdateModalData] = useState({
+    state: false,
+    category: {},
+    product: {},
   });
   const [newFile, setNewFile] = useState("no file selected!");
 
@@ -46,6 +52,13 @@ const Menu = (props) => {
   };
 
   const addItem = async (categoryId = "") => {
+    setNewItem({
+      type: "",
+      name: "",
+      price: 0,
+      category: "",
+      file: "",
+    });
     try {
       if (categoryId !== "") {
         // setNewItem({
@@ -115,6 +128,11 @@ const Menu = (props) => {
 
   return (
     <div>
+      <UpdateModal
+        data={updateModalData}
+        setUpdateModalData={setUpdateModalData}
+        getMenu={getMenu}
+      />
       {menu.map((category, index) => (
         <div
           id={category.$id}
@@ -151,15 +169,41 @@ const Menu = (props) => {
                 className="w-11/12 h-16 flex flex-row items-center justify-between px-4 font-semibold border-b border-gray-200"
               >
                 <span>{product.name}</span>
+                {/* <input
+                  type="text"
+                  name="name"
+                  onChange={handleUpdateInputChange}
+                  value={updatedProduct.name}
+                  placeholder={product.name}
+                  className="input_style w-24"
+                /> */}
                 <div>
                   <span>{product.price}₺</span>
+                  {/* <input
+                    type="text"
+                    name="price"
+                    onChange={handleUpdateInputChange}
+                    value={updatedProduct.price}
+                    placeholder={product.price + "₺"}
+                    className="input_style w-20"
+                  /> */}
                   {props.isAdmin && (
-                    <button
-                      onClick={() => deleteItem(product.$id)}
-                      className="button_style px-4 ml-4"
-                    >
-                      Sil
-                    </button>
+                    <>
+                      <button
+                        onClick={() =>
+                          setUpdateModalData({ state: true, category, product })
+                        }
+                        className="button_style px-4 ml-4 bg-emerald-400 hover:bg-emerald-500"
+                      >
+                        Güncelle
+                      </button>
+                      <button
+                        onClick={() => deleteItem(product.$id)}
+                        className="button_style px-4 ml-4"
+                      >
+                        Sil
+                      </button>
+                    </>
                   )}
                 </div>
               </li>

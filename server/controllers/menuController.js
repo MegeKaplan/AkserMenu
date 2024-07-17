@@ -180,26 +180,32 @@ export const addItem = async (req, res) => {
 
 export const updateItem = async (req, res) => {
   try {
-    const { type, name, price, imageUrl, category } = req.body;
+    const item = req.body;
+    const priceInt = Number(item.price);
     const docId = req.params.id;
 
-    if (name.length == "") {
+    if (item.name.length == "") {
       return res.status(500).json({
-        msg: "Ürün ismi boş bırakılamaz!",
+        msg: "İsim boş bırakılamaz!",
       });
     }
 
-    if (type == "product" && Number(price) <= 0) {
+    if (item.type == "product" && !(item.price > 0)) {
       return res.status(500).json({
-        msg: "Fiyat sıfırdan daha fazla olmalı!",
+        msg: "Fiyat sıfırdan daha fazla bir sayı olmalıdır!",
       });
     }
 
-    var updatedData;
-    if (type === "category") {
-      updatedData = { type, name, imageUrl: "" };
+    var docData;
+    if (item.type === "category") {
+      docData = { type: item.type, name: item.name, imageUrl: item.imageUrl };
     } else {
-      updatedData = { type, name, price, category };
+      docData = {
+        type: item.type,
+        name: item.name,
+        price: priceInt,
+        category: item.category,
+      };
     }
 
     const promise = await databases
@@ -207,7 +213,7 @@ export const updateItem = async (req, res) => {
         process.env.APPWRITE_DATABASE_ID,
         process.env.MENU_ID,
         docId,
-        updatedData
+        docData
       )
       .then(
         (response) => {
@@ -220,9 +226,15 @@ export const updateItem = async (req, res) => {
         }
       );
 
+    var resMsg;
+    item.type == "product"
+      ? (resMsg = "Ürün başarıyla güncellendi!")
+      : (resMsg = "Kategori başarıyla güncellendi!");
     res.status(201).json({
       status: "OK",
-      data: { ...promise },
+      // data: promise,
+      data: promise,
+      msg: resMsg,
     });
   } catch (error) {
     res.status(500).json({

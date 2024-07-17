@@ -25,7 +25,7 @@ const Nav = () => {
 
   return (
     <>
-      <nav className="w-full h-16 flex flex-row items-center justify-between px-4 sticky z-50">
+      <nav className="w-full h-16 flex flex-row items-center justify-between px-4 sticky z-40">
         <h1 className="text-2xl text-red-800 font-bold">AkserMenu</h1>
         <FaBars size={25} onClick={menuListToggle} className="cursor-pointer" />
       </nav>
@@ -33,7 +33,7 @@ const Nav = () => {
         onClick={menuListToggle}
         className={`${
           menuListState ? "bg-black bg-opacity-50 size-full" : "size-0"
-        } fixed top-0 left-0 z-40 flex justify-center`}
+        } fixed top-0 left-0 z-30 flex justify-center`}
       >
         {menuListState && (
           <ul className="w-11/12 fixed bg-opacity-50 bg-gray-100 backdrop-blur-sm rounded-md p-3 flex flex-col items-center justify-center mt-16 last:border-b-0">
