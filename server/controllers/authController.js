@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Query } from "node-appwrite";
+import { Client, Databases, ID, Query, Role, Permission } from "node-appwrite";
 import initConfig from "../initConfig.js";
 
 initConfig();
@@ -41,6 +41,48 @@ export const register = async (req, res) => {
       });
     }
 
+    // const collection = await databases.createCollection(
+    //   process.env.APPWRITE_DATABASE_ID,
+    //   ID.unique(),
+    //   username,
+    //   [Permission.read(Role.any()), Permission.write(Role.any())]
+    // );
+
+    // await databases.createStringAttribute(
+    //   process.env.APPWRITE_DATABASE_ID,
+    //   collection.$id,
+    //   "name",
+    //   64,
+    //   true
+    // );
+    // await databases.createStringAttribute(
+    //   process.env.APPWRITE_DATABASE_ID,
+    //   collection.$id,
+    //   "type",
+    //   32,
+    //   true
+    // );
+    // await databases.createStringAttribute(
+    //   process.env.APPWRITE_DATABASE_ID,
+    //   collection.$id,
+    //   "imageUrl",
+    //   1024,
+    //   false
+    // );
+    // await databases.createIntegerAttribute(
+    //   process.env.APPWRITE_DATABASE_ID,
+    //   collection.$id,
+    //   "price",
+    //   false
+    // );
+    // await databases.createStringAttribute(
+    //   process.env.APPWRITE_DATABASE_ID,
+    //   collection.$id,
+    //   "category",
+    //   128,
+    //   false
+    // );
+
     const promise = await databases
       .createDocument(
         process.env.APPWRITE_DATABASE_ID,
@@ -64,6 +106,7 @@ export const register = async (req, res) => {
       userData: { ...promise },
     });
   } catch (error) {
+    console.log(error.message);
     res.status(500).json({
       msg: error.message,
     });

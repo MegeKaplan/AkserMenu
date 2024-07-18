@@ -12,7 +12,9 @@ const Nav = () => {
 
   const getMenu = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/menu`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/menu/${process.env.REACT_APP_MENU_ID}`
+      );
       setMenu(response.data.data);
     } catch (error) {
       console.log(error);
@@ -38,8 +40,14 @@ const Nav = () => {
         {menuListState && (
           <ul className="w-11/12 fixed bg-opacity-50 bg-gray-100 backdrop-blur-sm rounded-md p-3 flex flex-col items-center justify-center mt-16 last:border-b-0">
             {menu.map((category) => (
-              <li key={category.$id} className="w-full h-16 border-b border-gray-800 first:border-t text-xl hover:bg-gray-800 hover:bg-opacity-25 transition">
-                <a className="w-full h-full flex items-center justify-center" href={"#" + category.$id}>
+              <li
+                key={category.$id}
+                className="w-full h-16 border-b border-gray-800 first:border-t text-xl hover:bg-gray-800 hover:bg-opacity-25 transition"
+              >
+                <a
+                  className="w-full h-full flex items-center justify-center"
+                  href={"#" + category.$id}
+                >
                   {category.name}
                 </a>
               </li>

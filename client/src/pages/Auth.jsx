@@ -8,6 +8,7 @@ const Auth = () => {
     email: "",
     password: "",
     username: "",
+    menuId: "",
   });
 
   const dispatch = useDispatch();
@@ -18,7 +19,7 @@ const Auth = () => {
 
   const formSubmitHandler = (e) => {
     e.preventDefault();
-    console.log(authData);
+    // console.log(authData);
     signUp
       ? dispatch(registerAction(authData))
       : dispatch(loginAction(authData));

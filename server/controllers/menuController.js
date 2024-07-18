@@ -19,10 +19,11 @@ const databases = new Databases(client);
 
 const storage = new Storage(client);
 
-const getItemsFunc = async () => {
+const getItemsFunc = async (menuId) => {
   const response = await databases.listDocuments(
     process.env.APPWRITE_DATABASE_ID,
-    process.env.MENU_ID
+    // process.env.MENU_ID
+    menuId
     // [Query.equal("type", "category")]
   );
 
@@ -31,7 +32,7 @@ const getItemsFunc = async () => {
 
 export const getItems = async (req, res) => {
   try {
-    const response = await getItemsFunc();
+    const response = await getItemsFunc(req.params.menuId);
 
     const items = response.documents;
 
@@ -146,7 +147,8 @@ export const addItem = async (req, res) => {
     const promise = await databases
       .createDocument(
         process.env.APPWRITE_DATABASE_ID,
-        process.env.MENU_ID,
+        // process.env.MENU_ID,
+        req.params.menuId,
         ID.unique(),
         docData
       )
@@ -157,6 +159,7 @@ export const addItem = async (req, res) => {
         },
         (error) => {
           console.log("error");
+          console.log(error);
           return error.message;
         }
       );
@@ -182,7 +185,7 @@ export const updateItem = async (req, res) => {
   try {
     const item = req.body;
     const priceInt = Number(item.price);
-    const docId = req.params.id;
+    const docId = req.params.itemId;
 
     if (item.name.length == "") {
       return res.status(500).json({
@@ -211,7 +214,8 @@ export const updateItem = async (req, res) => {
     const promise = await databases
       .updateDocument(
         process.env.APPWRITE_DATABASE_ID,
-        process.env.MENU_ID,
+        // process.env.MENU_ID,
+        req.params.menuId,
         docId,
         docData
       )
@@ -245,12 +249,13 @@ export const updateItem = async (req, res) => {
 
 export const deleteItem = async (req, res) => {
   try {
-    const docId = req.params.id;
+    const docId = req.params.itemId;
 
     const promise = await databases
       .deleteDocument(
         process.env.APPWRITE_DATABASE_ID,
-        process.env.MENU_ID,
+        // process.env.MENU_ID,
+        req.params.menuId,
         docId
       )
       .then(

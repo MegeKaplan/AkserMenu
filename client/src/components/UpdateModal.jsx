@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -12,6 +12,13 @@ const toastifyConfig = {
   progress: undefined,
   theme: "light",
 };
+
+let menuId;
+try {
+  menuId = JSON.parse(localStorage.userData).menuId;
+} catch (error) {
+  console.log(error);
+}
 
 const UpdateModal = (props) => {
   const [updatedProduct, setUpdatedProduct] = useState({
@@ -28,7 +35,7 @@ const UpdateModal = (props) => {
   const updateProduct = async (categoryId, itemId = "") => {
     try {
       const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/menu/${itemId}`,
+        `${process.env.REACT_APP_API_URL}/menu/${menuId}/${itemId}`,
         {
           type: "product",
           name: updatedProduct.name,

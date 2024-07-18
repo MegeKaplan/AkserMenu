@@ -13,10 +13,10 @@ import multer from "multer";
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-router.get("/", getItems);
-router.get("/:id", getItem);
-router.post("/", upload.single("file"), addItem);
-router.put("/:id", updateItem);
-router.delete("/:id", deleteItem);
+router.get("/:menuId", getItems);
+router.get("/:menuId/:itemId", getItem);
+router.post("/:menuId", upload.single("file"), addItem);
+router.put("/:menuId/:itemId", updateItem);
+router.delete("/:menuId/:itemId", deleteItem);
 
 export default router;

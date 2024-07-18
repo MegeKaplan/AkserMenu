@@ -14,6 +14,13 @@ const toastifyConfig = {
   theme: "light",
 };
 
+let menuId;
+try {
+  menuId = JSON.parse(localStorage.userData).menuId;
+} catch (error) {
+  console.log(error);
+}
+
 const Menu = (props) => {
   const [menu, setMenu] = useState([]);
   const [newItem, setNewItem] = useState({
@@ -32,7 +39,9 @@ const Menu = (props) => {
 
   const getMenu = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/menu`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/menu/${process.env.REACT_APP_MENU_ID}`
+      );
       setMenu(response.data.data);
     } catch (error) {
       console.log(error);
@@ -68,7 +77,7 @@ const Menu = (props) => {
         //   category: categoryId,
         // });
         const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/menu`,
+          `${process.env.REACT_APP_API_URL}/menu/${menuId}`,
           {
             type: "product",
             name: newItem.name,
@@ -79,6 +88,9 @@ const Menu = (props) => {
         toast.success(response.data.msg, toastifyConfig);
       } else {
         console.log(newFile);
+        if (newFile === "no file selected!") {
+          alert("Kategori eklemek için bir fotoğraf seçilmeli!");
+        }
         // setNewItem({
         //   type: "category",
         //   name: newItem.name,
@@ -92,7 +104,7 @@ const Menu = (props) => {
         formData.append("file", newFile);
 
         const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/menu`,
+          `${process.env.REACT_APP_API_URL}/menu/${menuId}`,
           formData,
           {
             headers: {
@@ -112,7 +124,7 @@ const Menu = (props) => {
   const deleteItem = async (itemId = "") => {
     try {
       const response = await axios.delete(
-        `${process.env.REACT_APP_API_URL}/menu/${itemId}`
+        `${process.env.REACT_APP_API_URL}/menu/${menuId}/${itemId}`
       );
       toast.success(response.data.msg, toastifyConfig);
       await getMenu();
