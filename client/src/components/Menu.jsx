@@ -14,7 +14,7 @@ const toastifyConfig = {
   theme: "light",
 };
 
-let menuId;
+let menuId = "testsubdomain";
 try {
   if (
     process.env.REACT_APP_MENU_ID.toString() ===
