@@ -9,7 +9,7 @@ const config = dotenv.config();
 
 const app = express();
 
-const PORT = 3000 || process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(bodyParser.json({ extended: true }));
@@ -22,5 +22,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+  console.log(`Server is running...`);
 });
