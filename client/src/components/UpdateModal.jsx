@@ -15,7 +15,14 @@ const toastifyConfig = {
 
 let menuId;
 try {
-  menuId = JSON.parse(localStorage.userData).menuId;
+  if (
+    process.env.REACT_APP_MENU_ID.toString() ===
+    JSON.parse(localStorage.userData).menuId.toString()
+  ) {
+    menuId = JSON.parse(localStorage.userData).menuId;
+  } else {
+    menuId = "testsubdomain";
+  }
 } catch (error) {
   console.log(error);
 }
