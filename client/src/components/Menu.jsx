@@ -14,7 +14,7 @@ const toastifyConfig = {
   theme: "light",
 };
 
-let menuId = "testsubdomain";
+let menuId = process.env.REACT_APP_MENU_ID;
 try {
   if (
     process.env.REACT_APP_MENU_ID.toString() ===
@@ -22,7 +22,7 @@ try {
   ) {
     menuId = JSON.parse(localStorage.userData).menuId;
   } else {
-    menuId = "testsubdomain";
+    menuId = process.env.REACT_APP_MENU_ID;
   }
 } catch (error) {
   console.log(error);
