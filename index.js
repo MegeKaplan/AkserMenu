@@ -2,8 +2,8 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import authRouter from "./routes/auth.js";
-import categoryRouter from "./routes/menu.js";
+import authRouter from "./server/routes/auth.js";
+import categoryRouter from "./server/routes/menu.js";
 
 const config = dotenv.config();
 
