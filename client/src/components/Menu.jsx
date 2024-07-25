@@ -14,18 +14,31 @@ const toastifyConfig = {
   theme: "light",
 };
 
-let menuId;
+// let menuId;
+// try {
+//   if (
+//     process.env.REACT_APP_MENU_ID.toString() ===
+//     JSON.parse(localStorage.userData).menuId.toString()
+//   ) {
+//     menuId = JSON.parse(localStorage.userData).menuId;
+//   } else {
+//     menuId = process.env.REACT_APP_MENU_ID;
+//   }
+// } catch (error) {
+//   console.log(error);
+// }
+
+let menuId = process.env.REACT_APP_MENU_ID;
 try {
   if (
-    process.env.REACT_APP_MENU_ID.toString() ===
+    process.env.REACT_APP_MENU_ID.toString() !==
     JSON.parse(localStorage.userData).menuId.toString()
   ) {
-    menuId = JSON.parse(localStorage.userData).menuId;
-  } else {
-    menuId = "testsubdomain";
+    localStorage.setItem("userData", null);
   }
 } catch (error) {
   console.log(error);
+  localStorage.setItem("userData", null);
 }
 
 const Menu = (props) => {
@@ -48,7 +61,7 @@ const Menu = (props) => {
     try {
       const response = await axios.get(
         // `${process.env.REACT_APP_API_URL}/menu/${process.env.REACT_APP_MENU_ID}`
-        `${process.env.REACT_APP_API_URL}/menu/${process.env.REACT_APP_MENU_ID}`
+        `${process.env.REACT_APP_API_URL}/menu/${menuId}`
       );
       setMenu(response.data.data);
     } catch (error) {
