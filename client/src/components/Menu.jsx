@@ -14,7 +14,7 @@ const toastifyConfig = {
   theme: "light",
 };
 
-let menuId = process.env.REACT_APP_MENU_ID;
+let menuId;
 try {
   if (
     process.env.REACT_APP_MENU_ID.toString() ===
@@ -22,7 +22,7 @@ try {
   ) {
     menuId = JSON.parse(localStorage.userData).menuId;
   } else {
-    menuId = process.env.REACT_APP_MENU_ID;
+    menuId = "testsubdomain";
   }
 } catch (error) {
   console.log(error);
@@ -48,7 +48,7 @@ const Menu = (props) => {
     try {
       const response = await axios.get(
         // `${process.env.REACT_APP_API_URL}/menu/${process.env.REACT_APP_MENU_ID}`
-        `${process.env.REACT_APP_API_URL}/menu/${menuId}`
+        `${process.env.REACT_APP_API_URL}/menu/${process.env.REACT_APP_MENU_ID}`
       );
       setMenu(response.data.data);
     } catch (error) {
