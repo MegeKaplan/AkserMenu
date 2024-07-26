@@ -13,9 +13,6 @@ const Admin = () => {
     isAdmin = false;
   }
 
-  console.log(process.env.REACT_APP_MENU_ID);
-  console.log(JSON.parse(localStorage.userData).menuId);
-
   return (
     <div>
       <Nav />

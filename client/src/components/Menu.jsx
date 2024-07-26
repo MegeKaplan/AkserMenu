@@ -45,8 +45,6 @@ const Menu = (props) => {
   });
   const [newFile, setNewFile] = useState("no file selected!");
 
-  console.log(props.isAdmin);
-
   const getMenu = async () => {
     try {
       const response = await axios.get(
@@ -61,7 +59,7 @@ const Menu = (props) => {
 
   useEffect(() => {
     getMenu();
-  });
+  }, []);
 
   const handleInputChange = (e) => {
     setNewItem({ ...newItem, [e.target.name]: e.target.value });
@@ -179,7 +177,7 @@ const Menu = (props) => {
           <img
             src={category.imageUrl}
             alt=""
-            className="[clip-path:polygon(20%_0%,80%_0%,100%_20%,100%_100%,0%_100%,0%_20%)] w-[100vw]"
+            className="[clip-path:polygon(20%_0%,80%_0%,100%_20%,100%_100%,0%_100%,0%_20%)] w-[100vw] max-h-96"
           />
           <ul
             className={`${
