@@ -13,19 +13,21 @@ const toastifyConfig = {
   theme: "light",
 };
 
-let menuId;
-try {
-  if (
-    process.env.REACT_APP_MENU_ID.toString() ===
-    JSON.parse(localStorage.userData).menuId.toString()
-  ) {
-    menuId = JSON.parse(localStorage.userData).menuId;
-  } else {
-    menuId = "testsubdomain";
-  }
-} catch (error) {
-  console.log(error);
-}
+// let menuId;
+// try {
+//   if (
+//     process.env.REACT_APP_MENU_ID.toString() ===
+//     JSON.parse(localStorage.userData).menuId.toString()
+//   ) {
+//     menuId = JSON.parse(localStorage.userData).menuId;
+//   } else {
+//     menuId = "testsubdomain";
+//   }
+// } catch (error) {
+//   console.log(error);
+// }
+
+let menuId = process.env.REACT_APP_MENU_ID;
 
 const UpdateModal = (props) => {
   const [updatedProduct, setUpdatedProduct] = useState({

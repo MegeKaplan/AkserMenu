@@ -27,19 +27,7 @@ const toastifyConfig = {
 // } catch (error) {
 //   console.log(error);
 // }
-
 let menuId = process.env.REACT_APP_MENU_ID;
-try {
-  if (
-    process.env.REACT_APP_MENU_ID.toString() !==
-    JSON.parse(localStorage.userData).menuId.toString()
-  ) {
-    localStorage.setItem("userData", null);
-  }
-} catch (error) {
-  console.log(error);
-  localStorage.setItem("userData", null);
-}
 
 const Menu = (props) => {
   const [menu, setMenu] = useState([]);
@@ -57,6 +45,8 @@ const Menu = (props) => {
   });
   const [newFile, setNewFile] = useState("no file selected!");
 
+  console.log(props.isAdmin);
+
   const getMenu = async () => {
     try {
       const response = await axios.get(
@@ -71,7 +61,7 @@ const Menu = (props) => {
 
   useEffect(() => {
     getMenu();
-  }, []);
+  });
 
   const handleInputChange = (e) => {
     setNewItem({ ...newItem, [e.target.name]: e.target.value });
