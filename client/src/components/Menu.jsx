@@ -179,7 +179,7 @@ const Menu = (props) => {
           <img
             src={category.imageUrl}
             alt=""
-            className="[clip-path:polygon(20%_0%,80%_0%,100%_20%,100%_100%,0%_100%,0%_20%)] w-12/12"
+            className="[clip-path:polygon(20%_0%,80%_0%,100%_20%,100%_100%,0%_100%,0%_20%)] w-[100vw]"
           />
           <ul
             className={`${
