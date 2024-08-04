@@ -28,7 +28,8 @@ const Nav = () => {
   return (
     <>
       <nav className="w-full h-16 flex flex-row items-center justify-between px-4 sticky z-40">
-        <h1 className="text-2xl text-red-800 font-bold">AkserMenu</h1>
+        {/* <h1 className="text-2xl text-red-800 font-bold">AkserMenu</h1> */}
+        <img src="/logo1.png" className="h-5/6 w-auto" alt="Logo" />
         <FaBars size={25} onClick={menuListToggle} className="cursor-pointer" />
       </nav>
       <div
